@@ -358,7 +358,7 @@ public class RankFightCommand implements TabExecutor {
                 "/rankfight admin setCredit <玩家名> <积分> [商店积分（可选）] -- 设置指定玩家的积分和商店积分",
                 "/rankfight admin reload -- 重载插件配置文件并强制存储数据到磁盘",
                 "——————————————",
-                "Developed and licensed by HikariLan,see plugin.yml for more license details."
+                "Developed by HikariLan,permitted under GNU Public License Version 3."
         ));
 
         generalHelp.forEach(sender::sendMessage);
