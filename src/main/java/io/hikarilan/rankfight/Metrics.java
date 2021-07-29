@@ -1,4 +1,4 @@
-package org.bstats.bukkit;
+package io.hikarilan.rankfight;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
