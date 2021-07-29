@@ -1,0 +1,16 @@
+# !!!!!DISCLAIMER!!!!!
+# Plugin RankFlight is developed and licensed by HikariLan(https://www.github.com/shaokeyibb).
+# Using this plugin means that you have accepted and agreed to these terms.
+# You are only have the use(including commercial use) rights,it means:
+# You CAN use the plugin,and make money on your server by using it;
+# You CAN'T redistribute,resell,decompile,modify this plugin.
+# Other rights which is not assigned here all reserved by HikariLan.
+name: RankFight
+version: @version@
+main: io.hikarilan.rankfight.RankFight
+authors: [ HikariLan ]
+softdepend:
+  - PlaceholderAPI
+commands:
+  rankfight:
+    aliases: [ rf ]

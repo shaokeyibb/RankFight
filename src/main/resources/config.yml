@@ -1,0 +1,6 @@
+# 排位积分间隔
+CreditInterval: 100
+# 胜利获得积分数
+CreditWin: 10
+# 游戏队列最大等待时间，单位秒，设置为 -1 则无限制
+QueueTimeoutSec: 30
