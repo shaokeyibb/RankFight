@@ -39,7 +39,7 @@ public class PlayerData {
         Arrays.stream(jsons)
                 .parallel().forEach(file -> {
             try {
-                data.add(plugin.getGson().fromJson(new FileReader(file), PlayerData.class));
+                data.add(RankFight.getGson().fromJson(new FileReader(file), PlayerData.class));
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
