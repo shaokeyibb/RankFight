@@ -68,6 +68,8 @@ public class PAPIHook extends PlaceholderExpansion {
         } else if (type.equals("credit")) {
             return String.valueOf(PlayerData.getPlayerDataByUUID(player.getUniqueId()).getCredit());
 
+        } else if (type.equals("shopCredit")) {
+            return String.valueOf(PlayerData.getPlayerDataByUUID(player.getUniqueId()).getShopCredit());
         } else {
             return null;
         }
