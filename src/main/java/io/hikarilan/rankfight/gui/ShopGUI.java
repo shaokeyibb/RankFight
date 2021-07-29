@@ -5,6 +5,7 @@ import io.hikarilan.rankfight.RankFight;
 import io.hikarilan.rankfight.beans.ItemGift;
 import io.hikarilan.rankfight.beans.PlayerData;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -24,7 +25,7 @@ public class ShopGUI {
     private static Inventory getShopGUI() {
         Inventory inventory = Bukkit.createInventory(new ShopGUIHolder(), 54, "积分商店");
         inventory.addItem(ItemGift.getData().stream().map(itemGift -> {
-            ItemStack item = itemGift.getItem();
+            ItemStack item = itemGift.getItem().clone();
             ItemMeta meta = item.getItemMeta();
             List<String> lore;
             if (meta.hasLore()) {
@@ -33,7 +34,7 @@ public class ShopGUI {
                 lore = Lists.newArrayList();
             }
             lore.add("");
-            lore.add("————————");
+            lore.add("————<>————");
             lore.add("购买所需积分:" + itemGift.getCreditNeeded());
             meta.setLore(lore);
             item.setItemMeta(meta);
@@ -60,8 +61,19 @@ public class ShopGUI {
             public void onClickItem(InventoryClickEvent e) {
                 if (e.getClickedInventory() != null && e.getClickedInventory().getHolder() instanceof ShopGUIHolder) {
                     e.setCancelled(true);
-                    if (e.isLeftClick() && e.getCurrentItem() != null) {
-                        Optional<ItemGift> gift = ItemGift.getData().parallelStream().filter(itemGift -> itemGift.getItem().equals(e.getCurrentItem())).findFirst();
+                    if (e.isLeftClick() && e.getCurrentItem() != null && e.getCurrentItem().getType() != Material.AIR) {
+                        Optional<ItemGift> gift = ItemGift.getData().parallelStream().filter(itemGift -> {
+                            ItemStack item = e.getCurrentItem().clone();
+                            ItemMeta meta = item.getItemMeta();
+                            List<String> lore = meta.getLore();
+                            int index = lore.indexOf("————<>————");
+                            lore.remove(index + 1);
+                            lore.remove(index);
+                            lore.remove(index - 1);
+                            meta.setLore(lore);
+                            item.setItemMeta(meta);
+                            return itemGift.getItem().equals(item);
+                        }).findFirst();
                         PlayerData data = PlayerData.getPlayerDataByUUID(e.getWhoClicked().getUniqueId());
                         if (data.getShopCredit() >= gift.get().getCreditNeeded()) {
                             e.getWhoClicked().getInventory().addItem(gift.get().getItem());
