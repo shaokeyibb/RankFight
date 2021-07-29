@@ -11,6 +11,7 @@ import io.hikarilan.rankfight.serialize.ArenaDataDeserializer;
 import io.hikarilan.rankfight.serialize.ItemGiftSerializer;
 import io.hikarilan.rankfight.serialize.LocationSerializer;
 import lombok.Getter;
+import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
@@ -49,6 +50,9 @@ public final class RankFight extends JavaPlugin {
     public void onEnable() {
         // Plugin startup logic
         instance = this;
+
+        new Metrics(this, 12265);
+
         saveDefaultConfig();
 
         try {
