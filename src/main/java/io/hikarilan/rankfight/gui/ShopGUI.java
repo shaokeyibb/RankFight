@@ -24,22 +24,24 @@ public class ShopGUI {
 
     private static Inventory getShopGUI() {
         Inventory inventory = Bukkit.createInventory(new ShopGUIHolder(), 54, "积分商店");
-        inventory.addItem(ItemGift.getData().stream().map(itemGift -> {
-            ItemStack item = itemGift.getItem().clone();
-            ItemMeta meta = item.getItemMeta();
-            List<String> lore;
-            if (meta.hasLore()) {
-                lore = meta.getLore();
-            } else {
-                lore = Lists.newArrayList();
-            }
-            lore.add("");
-            lore.add("————<>————");
-            lore.add("购买所需积分:" + itemGift.getCreditNeeded());
-            meta.setLore(lore);
-            item.setItemMeta(meta);
-            return item;
-        }).distinct().toArray(ItemStack[]::new));
+        inventory.addItem(ItemGift.getData().stream()
+                .filter(itemGift -> itemGift.getItem().getItemMeta() != null)
+                .map(itemGift -> {
+                    ItemStack item = itemGift.getItem().clone();
+                    ItemMeta meta = item.getItemMeta();
+                    List<String> lore;
+                    if (meta.hasLore()) {
+                        lore = meta.getLore();
+                    } else {
+                        lore = Lists.newArrayList();
+                    }
+                    lore.add("");
+                    lore.add("————<>————");
+                    lore.add("购买所需积分:" + itemGift.getCreditNeeded());
+                    meta.setLore(lore);
+                    item.setItemMeta(meta);
+                    return item;
+                }).distinct().toArray(ItemStack[]::new));
         return inventory;
     }
 

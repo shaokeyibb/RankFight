@@ -13,7 +13,6 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Set;
-import java.util.UUID;
 
 @Data
 public class ItemGift {
@@ -38,37 +37,38 @@ public class ItemGift {
         if (jsons == null) return;
         Arrays.stream(jsons)
                 .parallel().forEach(file -> {
-            try {
-                data.add(RankFight.getGson().fromJson(new FileReader(file), ItemGift.class));
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
-        });
+                    try {
+                        data.add(RankFight.getGson().fromJson(new FileReader(file), ItemGift.class));
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                });
     }
 
     public static void saveAll() {
-        data.forEach(itemGift -> {
-            String name = itemGift.getItem().getItemMeta().getDisplayName() == null ? itemGift.getItem().getType().name() : itemGift.getItem().getItemMeta().getDisplayName();
-            File file = new File(plugin.getItemGiftDir(), name + ".json");
-            if (!file.exists()) {
-                try {
-                    file.createNewFile();
-                    try (Writer writer = Files.newWriter(file, StandardCharsets.UTF_8)) {
-                        RankFight.getGson().toJson(itemGift, writer);
+        data.stream().filter(itemGift -> itemGift.getItem().getItemMeta() != null)
+                .forEach(itemGift -> {
+                    String name = itemGift.getItem().getItemMeta().getDisplayName() == null ? itemGift.getItem().getType().name() : itemGift.getItem().getItemMeta().getDisplayName();
+                    File file = new File(plugin.getItemGiftDir(), name + ".json");
+                    if (!file.exists()) {
+                        try {
+                            file.createNewFile();
+                            try (Writer writer = Files.newWriter(file, StandardCharsets.UTF_8)) {
+                                RankFight.getGson().toJson(itemGift, writer);
+                            }
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    } else {
+                        try {
+                            try (Writer writer = Files.newWriter(file, StandardCharsets.UTF_8)) {
+                                RankFight.getGson().toJson(itemGift, writer);
+                            }
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                     }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }else {
-                try {
-                    try (Writer writer = Files.newWriter(file, StandardCharsets.UTF_8)) {
-                        RankFight.getGson().toJson(itemGift, writer);
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
+                });
     }
 
     private final int creditNeeded;
